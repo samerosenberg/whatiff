@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
 import axios, { AxiosRequestConfig } from "axios";
-import leagueInfo from "../secrets.json";
 import { ITeam, Team } from "../helpers/team";
 import Dropdown from "../components/dropdown";
 import Layout from "../components/Layout";
 import TeamTable, { SkeletonTable } from "../components/TeamTable";
-import Skeleton from "react-loading-skeleton";
 
 export default function TeamsPage(teamProps: ITeamProps) {
     const [activeTeam, setActiveTeam] = useState("");

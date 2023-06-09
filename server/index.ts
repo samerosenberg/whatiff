@@ -41,7 +41,7 @@ function api(req: Request, tail: string): Promise<any> {
     const route = createRoute(leagueId, year, tail);
 
     return axios
-        .get(route, { headers: JSON.parse(req.headers.headers as string) })
+        .get(route, { headers: req.headers.headers })
         .then((response) => {
             return response.data;
         })
