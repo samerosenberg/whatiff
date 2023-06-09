@@ -2,6 +2,7 @@ import { TeamRecord, ITeamRecord } from "./record";
 import { Player, IESPNPlayer } from "./player";
 import { Roster } from "./roster";
 import { lineupSlots, posToID } from "./constants";
+import { textChangeRangeIsUnchanged } from "typescript";
 
 export class Team {
     /**
@@ -148,6 +149,23 @@ export class Team {
         );
         this.transactionCounter = team.transactionCounter;
         this.waiverRank = team.waiverRank;
+    }
+
+    public getTopThreeScorers(): Player[] {
+        var topThree: Player[] = [];
+
+        for (const pos of lineupSlots) {
+            for (const starter of this.roster[pos]) {
+                if (topThree.length < 3) {
+                    topThree.push(starter);
+                } else {
+                    topThree.push(starter);
+                    topThree = topThree.sort((player1, player2) => player2.weekStats!.appliedTotal - player1.weekStats!.appliedTotal).slice(0, 3);
+                }
+            }
+        }
+
+        return topThree;
     }
 
     /**

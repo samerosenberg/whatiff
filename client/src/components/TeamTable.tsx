@@ -83,7 +83,7 @@ export default function TeamTable(tableProps: ITeamTableProps) {
     );
 }
 
-export function SkeletonTable() {
+export function SkeletonTeam() {
     return (
         <>
             <SkeletonTheme baseColor="#d3d3d3" highlightColor="#444">

@@ -1,5 +1,5 @@
 /**
- * Positions in a typical Fantasy Football roster
+ * Starting positions in a typical Fantasy Football roster
  */
 export const lineupSlots = ["QB", "RB", "WR", "TE", "FLEX", "DST", "K"];
 
@@ -31,6 +31,9 @@ export const lineupSlotId: Record<number, string> = {
     20: "BE",
 };
 
+/**
+ * Mapping of pro team id to their full team name
+ */
 export const proTeamId: Record<number, string> = {
     0: "None",
     1: "Atlanta Falcons",
@@ -67,6 +70,9 @@ export const proTeamId: Record<number, string> = {
     34: "Houston Texans",
 };
 
+/**
+ * Mapping of pro team id to their team abbreviation
+ */
 export const proTeamAbbrev: Record<number, string> = {
     0: "None",
     1: "ATL",

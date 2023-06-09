@@ -1,5 +1,5 @@
 import { KeyPairKeyObjectResult } from "crypto";
-import { ITeam } from "./team";
+import { ITeam, Team } from "./team";
 
 export class Matchup {
     /**

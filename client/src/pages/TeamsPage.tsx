@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 import { ITeam, Team } from "../helpers/team";
 import Dropdown from "../components/dropdown";
 import Layout from "../components/Layout";
-import TeamTable, { SkeletonTable } from "../components/TeamTable";
+import TeamTable, { SkeletonTeam } from "../components/TeamTable";
 
 export default function TeamsPage(teamProps: ITeamProps) {
     const [activeTeam, setActiveTeam] = useState("");
@@ -27,7 +27,7 @@ export default function TeamsPage(teamProps: ITeamProps) {
             <Dropdown list={teamProps.cache ? teamProps.cache[week]?.map((team) => team.abbrev) : []} title={"Teams"} activeVar={activeTeam} setVar={setActiveTeam}></Dropdown>
             <Dropdown list={[1, 2, 3]} title={"Week"} activeVar={week} setVar={setWeek}></Dropdown>
 
-            {loading ? <SkeletonTable /> : activeTeam !== "" ? <TeamTable team={teamProps.cache ? teamProps?.cache[week]?.find((team) => team.abbrev === activeTeam) : undefined} /> : <div></div>}
+            {loading ? <SkeletonTeam /> : activeTeam !== "" ? <TeamTable team={teamProps.cache ? teamProps?.cache[week]?.find((team) => team.abbrev === activeTeam) : undefined} /> : <div></div>}
         </Layout>
     );
 }
