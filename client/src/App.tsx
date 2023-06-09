@@ -13,15 +13,20 @@ function App() {
     const [isLoading, setLoading] = useState(true);
     const [cachedData, setCache] = useState<{ [week: number]: Team[] | undefined }>();
     const [league, setLeague] = useState();
-    const headers = useRef({ headers: `Cookie: espn_s2=${leagueInfo.espn_s2}; SWID=${leagueInfo.swid};` });
+    const headers = useRef({ headers: `{"Cookie": "espn_s2=${leagueInfo.espn_s2}; SWID=${leagueInfo.swid};"}` });
     const config = useRef({ params: { leagueId: leagueInfo.leagueID, year: 2022, week: 1 }, headers: headers.current });
 
     useEffect(() => {
         if (!league && headers) {
-            axios.get("/league", config.current).then((res) => {
-                setLeague(res.data);
-                setLoading(false);
-            });
+            axios
+                .get("/league", config.current)
+                .then((res) => {
+                    setLeague(res.data);
+                    setLoading(false);
+                })
+                .catch((err) => {
+                    setLoading(false);
+                });
         }
     }, []);
 
