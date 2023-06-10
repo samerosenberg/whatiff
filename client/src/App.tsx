@@ -9,6 +9,7 @@ import { ITeam, Team } from "./helpers/team";
 import MatchupsPage from "./pages/MatchupsPage";
 import { Matchup } from "./helpers/matchup";
 import { ILeague } from "./helpers/league";
+import BoxScorePage from "./pages/BoxScorePage";
 
 axios.defaults.withCredentials = true;
 
