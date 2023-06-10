@@ -25,7 +25,8 @@ export default function TeamsPage(teamProps: ITeamProps) {
     return (
         <Layout>
             <Dropdown list={teamProps.cache ? teamProps.cache[week]?.map((team) => team.abbrev) : []} title={"Teams"} activeVar={activeTeam} setVar={setActiveTeam}></Dropdown>
-            <Dropdown list={[1, 2, 3]} title={"Week"} activeVar={week} setVar={setWeek}></Dropdown>
+            {/*//TODO Conditionally display week after user picks teams*/}
+            <Dropdown list={Array.from({ length: teamProps.maxWeek! }, (value, index) => index + 1)} title={"Week"} activeVar={week} setVar={setWeek}></Dropdown>
 
             {loading ? <SkeletonTeam /> : activeTeam !== "" ? <TeamTable team={teamProps.cache ? teamProps?.cache[week]?.find((team) => team.abbrev === activeTeam) : undefined} /> : <div></div>}
         </Layout>
@@ -37,4 +38,5 @@ interface ITeamProps {
     config: { params: { leagueId: string; year: number; week: number }; headers: { headers: string } };
     cache: { [week: number]: Team[] | undefined } | undefined;
     addToCache: (cache: { [week: number]: Team[] | undefined }) => void;
+    maxWeek: number | undefined;
 }

@@ -1,3 +1,4 @@
+import { match } from "assert";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Dropdown from "../components/dropdown";
@@ -39,7 +40,12 @@ export default function MatchupsPage(matchupProps: IMatchupProps) {
 
     return (
         <Layout>
-            <Dropdown list={[1, 2, 3]} title={"Week"} activeVar={week} setVar={setWeek}></Dropdown>
+            <Dropdown
+                list={matchupProps.matchupCache ? Array.from({ length: Math.max(...Object.keys(matchupProps.matchupCache!).map(Number)) }, (value, index) => index + 1) : []}
+                title={"Week"}
+                activeVar={week}
+                setVar={setWeek}
+            ></Dropdown>
 
             {
                 /*loading ? <SkeletonMatchup /> :*/ week > 0 ? (

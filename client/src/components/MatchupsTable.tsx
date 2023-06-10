@@ -13,7 +13,7 @@ export default function MatchupsTable(tableProps: IMatchupTableProps) {
         <>
             {tableProps.matchups?.map((matchup: Matchup) => {
                 return (
-                    <div tabIndex={0} className="collapse collapse-arrow join-item border border-base-300 m-10">
+                    <div tabIndex={0} className="collapse collapse-arrow join-item border border-base-300 m-10 w-auto">
                         <input
                             type="checkbox"
                             checked={openMatchups.includes(matchup.id)}

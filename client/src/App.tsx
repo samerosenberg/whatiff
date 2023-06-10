@@ -8,6 +8,7 @@ import TeamsPage from "./pages/TeamsPage";
 import { ITeam, Team } from "./helpers/team";
 import MatchupsPage from "./pages/MatchupsPage";
 import { Matchup } from "./helpers/matchup";
+import { ILeague } from "./helpers/league";
 
 axios.defaults.withCredentials = true;
 
@@ -15,7 +16,7 @@ function App() {
     const [isLoading, setLoading] = useState(true);
     const [teamCache, setTeamCache] = useState<{ [week: number]: Team[] | undefined }>();
     const [matchupCache, setMatchupCache] = useState<{ [week: number]: Matchup[] | undefined }>();
-    const [league, setLeague] = useState();
+    const [league, setLeague] = useState<ILeague>();
     const week = 0;
     const headers = useRef({ headers: `{"Cookie": "espn_s2=${leagueInfo.espn_s2}; SWID=${leagueInfo.swid};"}` });
     const config = useRef({ params: { leagueId: leagueInfo.leagueID, year: 2022, week: week }, headers: headers.current });
@@ -31,10 +32,6 @@ function App() {
                 .catch((err) => {
                     setLoading(false);
                 });
-            axios.get("/teams", config.current).then((res: any) => {
-                setTeamCache({ [week]: res.data.teams.map((team: ITeam) => new Team(team, week)) });
-                setLoading(false);
-            });
         }
     }, []);
 
@@ -47,7 +44,10 @@ function App() {
         <div>
             <Navbar />
             <Routes>
-                <Route path="/teams" element={<TeamsPage headers={headers.current} config={config.current} cache={teamCache} addToCache={setTeamCache} />} />
+                <Route
+                    path="/teams"
+                    element={<TeamsPage headers={headers.current} config={config.current} cache={teamCache} addToCache={setTeamCache} maxWeek={league?.status.finalScoringPeriod} />}
+                />
                 <Route
                     path="/matchups"
                     element={
