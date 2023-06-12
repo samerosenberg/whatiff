@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 import { Matchup } from "../helpers/matchup";
 import { Team } from "../helpers/team";
 import BoxScorePage from "../pages/BoxScorePage";
@@ -13,9 +13,6 @@ export default function MatchupsTable(tableProps: IMatchupTableProps) {
 
     return (
         <>
-            <Routes>
-                <Route path="/boxscore/:matchupid" element={<BoxScorePage matchups={tableProps.matchups} teams={tableProps.teams} />} />
-            </Routes>
             {tableProps.matchups?.map((matchup: Matchup) => {
                 return (
                     <div tabIndex={0} className="collapse collapse-arrow join-item border border-base-300 m-10 w-auto">
@@ -67,7 +64,7 @@ export default function MatchupsTable(tableProps: IMatchupTableProps) {
                                 </ul>
                             </div>
                             <div className="mt-5">
-                                <Link className="link link-info" to={"/boxscore/" + matchup.id}>
+                                <Link className="link link-info" to={"/boxscore/" + matchup.matchupPeriodId + "/" + matchup.id}>
                                     See full box score
                                 </Link>
                             </div>
