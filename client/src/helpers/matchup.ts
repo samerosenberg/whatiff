@@ -72,7 +72,7 @@ export interface IMatchup {
     winner: string;
 }
 
-interface IBoxScore {
+export interface IBoxScore {
     /**
      *Follows form: {losses, statBySlot: null, ties, wins }
      *

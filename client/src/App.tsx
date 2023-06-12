@@ -4,9 +4,9 @@ import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import axios from "axios";
 import TeamsPage from "./pages/TeamsPage";
-import { Team } from "./helpers/team";
+import { ITeam, Team } from "./helpers/team";
 import MatchupsPage from "./pages/MatchupsPage";
-import { Matchup } from "./helpers/matchup";
+import { IMatchup, Matchup } from "./helpers/matchup";
 import { ILeague } from "./helpers/league";
 import { FantasyFootballContext } from "./components/FantasyFootballContext";
 import BoxScorePage from "./pages/BoxScorePage";
@@ -36,16 +36,40 @@ function App() {
         }
     }, []);
 
+    async function initCache(week: number): Promise<boolean> {
+        if (!matchupCache || !matchupCache[week]) {
+            axios.get("/matchups", config).then((res: any) => {
+                const allGames: Matchup[] = res.data.schedule.map((matchup: IMatchup) => new Matchup(matchup));
+                var cache: { [week: number]: Matchup[] | undefined } = {};
+                for (const matchup of allGames) {
+                    if (matchup.matchupPeriodId in cache) {
+                        cache[matchup.matchupPeriodId]?.push(matchup);
+                    } else {
+                        cache[matchup.matchupPeriodId] = [matchup];
+                    }
+                }
+                setMatchupCache(cache);
+            });
+        }
+        if (!teamCache || !teamCache[week]) {
+            config.params.week = week;
+            axios.get("/teams", config).then((res: any) => {
+                setTeamCache({ ...teamCache, [week]: res.data.teams.map((team: ITeam) => new Team(team, week)) });
+            });
+        }
+        return true;
+    }
+
     //TODO Add better loading screen
     if (isLoading) {
         return <div className="App">Loading...</div>;
     }
 
     return (
-        <FantasyFootballContext.Provider value={{ headers, config, teamCache, setTeamCache, matchupCache, setMatchupCache }}>
+        <FantasyFootballContext.Provider value={{ headers, config, teamCache, setTeamCache, matchupCache, setMatchupCache, initCache }}>
             <Navbar />
             <Routes>
-                <Route path="teams" element={<TeamsPage headers={headers} config={config} cache={teamCache} addToCache={setTeamCache} maxWeek={league?.status.finalScoringPeriod} />} />
+                <Route path="teams" element={<TeamsPage maxWeek={league?.status.finalScoringPeriod} />} />
                 <Route path="matchups" element={<MatchupsPage />} />
                 <Route path="boxscore/:week/:matchupId" element={<BoxScorePage />} />
             </Routes>

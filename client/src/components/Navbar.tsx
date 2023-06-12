@@ -1,7 +1,7 @@
 export default function Navbar() {
     return (
         <div className="navbar bg-black">
-            <div className="navbar-start">
+            <div className="navbar-start w-1/3">
                 <div className="dropdown">
                     <label tabIndex={0} className="btn btn-ghost lg:hidden">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="white">
@@ -13,13 +13,13 @@ export default function Navbar() {
                             <a href="/teams">Teams</a>
                         </li>
                         <li>
-                            <a>Parent</a>
+                            <a>WhatIFF</a>
                             <ul className="p-2">
                                 <li>
-                                    <a>Submenu 1</a>
+                                    <a>Max Points</a>
                                 </li>
                                 <li>
-                                    <a>Submenu 2</a>
+                                    <a>Schedule Change</a>
                                 </li>
                             </ul>
                         </li>
@@ -30,20 +30,20 @@ export default function Navbar() {
                 </div>
                 <a className="font-bold ml-2 normal-case text-xl text-white">WhatIFF</a>
             </div>
-            <div className="navbar-center hidden lg:flex">
+            <div className="navbar-center w-1/3 justify-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1 text-white">
                     <li className="hover:bg-slate-400 rounded">
                         <a href="/teams">Teams</a>
                     </li>
                     <li tabIndex={0}>
                         <details>
-                            <summary>Parent</summary>
-                            <ul className="p-2">
+                            <summary className="hover:bg-slate-400 rounded">WhatIFF</summary>
+                            <ul className="p-2 text-black">
                                 <li>
-                                    <a>Submenu 1</a>
+                                    <a>Max Points</a>
                                 </li>
                                 <li>
-                                    <a>Submenu 2</a>
+                                    <a>Schedule Chane</a>
                                 </li>
                             </ul>
                         </details>

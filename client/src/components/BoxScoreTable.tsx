@@ -3,9 +3,9 @@ import { lineupSlotId, proTeamId } from "../helpers/constants";
 import { Player } from "../helpers/player";
 import { Team } from "../helpers/team";
 import "react-loading-skeleton/dist/skeleton.css";
-import { IBoxScore, Matchup } from "../helpers/matchup";
+import { Matchup } from "../helpers/matchup";
 
-export default function TeamTable(tableProps: ITeamTableProps) {
+export default function BoxScoreTable(tableProps: IBoxScoreTableProps) {
     if (!tableProps.team?.roster) {
         return <></>;
     }
@@ -52,17 +52,6 @@ export default function TeamTable(tableProps: ITeamTableProps) {
                             </tr>
                         );
                     })}
-                    <tr>
-                        <td>
-                            <div className="flex items-center space-x-3">
-                                <div>
-                                    <div className="font-bold text-xl">Total Points</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td></td>
-                        <td className="font-bold text-xl">{tableProps.boxScore?.totalPoints.toFixed(2)}</td>
-                    </tr>
                 </tbody>
                 <td colSpan={3}>
                     <div className="divider"></div>
@@ -180,7 +169,7 @@ export function SkeletonTeam() {
     );
 }
 
-interface ITeamTableProps {
+interface IBoxScoreTableProps {
     team: Team | undefined;
-    boxScore?: IBoxScore | undefined;
+    matchup: Matchup | undefined;
 }

@@ -9,6 +9,9 @@ const base: IFantasyFootballContext = {
     setMatchupCache: () => {},
     teamCache: {},
     setTeamCache: () => {},
+    initCache: () => {
+        return Promise.resolve(false);
+    },
 };
 
 export const FantasyFootballContext = createContext<IFantasyFootballContext>(base);
@@ -20,4 +23,5 @@ interface IFantasyFootballContext {
     setMatchupCache: (cache?: { [week: number]: Matchup[] | undefined }) => void;
     teamCache: { [week: number]: Team[] | undefined } | undefined;
     setTeamCache: (cache: { [week: number]: Team[] | undefined }) => void;
+    initCache: (week: number) => Promise<boolean>;
 }
