@@ -43,7 +43,7 @@ export default function Navbar() {
                                     <a>Max Points</a>
                                 </li>
                                 <li>
-                                    <a>Schedule Chane</a>
+                                    <a>Schedule Change</a>
                                 </li>
                             </ul>
                         </details>
