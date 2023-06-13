@@ -23,16 +23,18 @@ export default function MatchupsTable(tableProps: IMatchupTableProps) {
                                 openMatchups.includes(matchup.id) ? setOpenMatchups(openMatchups.filter((matchupId) => matchupId !== matchup.id)) : setOpenMatchups([...openMatchups, matchup.id])
                             }
                         />
-                        <div className="collapse-title text-xl font-medium flex flex-row flex-wrap">
-                            <p className="text-left w-1/3">{tableProps.teams?.find((team) => team.id === matchup.home.teamId)?.name}</p>
+                        <div className="collapse-title font-medium flex flex-row flex-wrap">
+                            <div className="text-left w-1/3">
+                                <p className="text-2xl">{tableProps.teams?.find((team) => team.id === matchup.home.teamId)?.name}</p>
+                                <p>{matchup.home.totalPoints}</p>
+                            </div>
                             <p className="text-center w-1/3">vs</p>
-                            <p className="text-right w-1/3">{tableProps.teams?.find((team) => team.id === matchup.away.teamId)?.name}</p>
+                            <div className="text-right w-1/3">
+                                <p className="text-2xl">{tableProps.teams?.find((team) => team.id === matchup.away.teamId)?.name}</p>
+                                <p>{matchup.away.totalPoints}</p>
+                            </div>
                         </div>
                         <div className="collapse-content">
-                            <div className="flex">
-                                <p className="text-left w-1/2 font-bold text-2xl">{matchup.home.totalPoints}</p>
-                                <p className="text-right w-1/2 font-bold text-2xl">{matchup.away.totalPoints}</p>
-                            </div>
                             <div className="flex">
                                 <p className="text-left w-1/2 font-bold mt-2">Top Scorers</p>
                                 <p className="text-right w-1/2 font-bold mt-2">Top Scorers</p>

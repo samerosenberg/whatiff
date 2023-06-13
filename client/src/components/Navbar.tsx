@@ -13,6 +13,9 @@ export default function Navbar() {
                             <a href="/teams">Teams</a>
                         </li>
                         <li>
+                            <a href="/schedule">Schedule</a>
+                        </li>
+                        <li>
                             <a>WhatIFF</a>
                             <ul className="p-2">
                                 <li>
@@ -34,6 +37,9 @@ export default function Navbar() {
                 <ul className="menu menu-horizontal px-1 text-white">
                     <li className="hover:bg-slate-400 rounded">
                         <a href="/teams">Teams</a>
+                    </li>
+                    <li className="hover:bg-slate-400 rounded">
+                        <a href="/schedule">Schedule</a>
                     </li>
                     <li tabIndex={0}>
                         <details>

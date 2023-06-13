@@ -48,7 +48,7 @@ export default function TeamTable(tableProps: ITeamTableProps) {
                                     </div>
                                 </td>
                                 <td>{lineupSlotId[player.lineupSlotId]}</td>
-                                <td>{player.weekStats?.appliedTotal.toFixed(1)}</td>
+                                <td>{player.weekStats?.appliedTotal.toFixed(1) ?? "BYE"}</td>
                             </tr>
                         );
                     })}
@@ -86,7 +86,7 @@ export default function TeamTable(tableProps: ITeamTableProps) {
                                     </div>
                                 </td>
                                 <td>{lineupSlotId[player.lineupSlotId]}</td>
-                                <td>{player.weekStats?.appliedTotal.toFixed(1)}</td>
+                                <td>{player.weekStats?.appliedTotal.toFixed(1) ?? "BYE"}</td>
                             </tr>
                         );
                     })}

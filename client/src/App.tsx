@@ -10,6 +10,7 @@ import { IMatchup, Matchup } from "./helpers/matchup";
 import { ILeague } from "./helpers/league";
 import { FantasyFootballContext } from "./components/FantasyFootballContext";
 import BoxScorePage from "./pages/BoxScorePage";
+import SchedulePage from "./pages/SchedulePage";
 
 axios.defaults.withCredentials = true;
 
@@ -70,6 +71,7 @@ function App() {
             <Navbar />
             <Routes>
                 <Route path="teams" element={<TeamsPage maxWeek={league?.status.finalScoringPeriod} />} />
+                <Route path="schedule" element={<SchedulePage />} />
                 <Route path="matchups" element={<MatchupsPage />} />
                 <Route path="boxscore/:week/:matchupId" element={<BoxScorePage />} />
             </Routes>
