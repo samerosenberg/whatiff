@@ -14,17 +14,24 @@ export default function TeamsPage(teamProps: ITeamProps) {
     const [loading, setLoading] = useState(true);
     const [boxScore, setBoxScore] = useState<IBoxScore>();
 
-    const { headers, config, teamCache, setTeamCache, matchupCache, setMatchupCache, initCache } = useContext(FantasyFootballContext);
+    const { headers, config, teamCache, setTeamCache, matchupCache, setMatchupCache, initCache } =
+        useContext(FantasyFootballContext);
 
     useEffect(() => {
         if (!teamCache || !teamCache[week]) {
             setLoading(true);
-            initCache(week).then((doneLoading) => setLoading(!doneLoading));
+            initCache(week).then((doneLoading) => {
+                setLoading(!doneLoading);
+            });
         }
         if (matchupCache) {
-            var boxscore = matchupCache[week]?.find((matchup) => matchup.home.teamId === activeTeam?.id)?.home;
+            var boxscore = matchupCache[week]?.find(
+                (matchup) => matchup.home.teamId === activeTeam?.id
+            )?.home;
             if (!boxscore) {
-                boxscore = matchupCache[week]?.find((matchup) => matchup.away.teamId === activeTeam?.id)?.away;
+                boxscore = matchupCache[week]?.find(
+                    (matchup) => matchup.away.teamId === activeTeam?.id
+                )?.away;
             }
             setBoxScore(boxscore);
         }
@@ -36,11 +43,37 @@ export default function TeamsPage(teamProps: ITeamProps) {
                 list={teamCache ? teamCache[week]?.map((team) => team.abbrev) : []}
                 title={"Teams"}
                 activeVar={activeTeam?.abbrev}
-                setVar={(abbrev: string) => (teamCache ? setActiveTeam(teamCache[week]?.find((team) => team.abbrev === abbrev)) : setActiveTeam(undefined))}
+                setVar={(abbrev: string) =>
+                    teamCache
+                        ? setActiveTeam(teamCache[week]?.find((team) => team.abbrev === abbrev))
+                        : setActiveTeam(undefined)
+                }
             ></Dropdown>
-            {activeTeam ? <Dropdown list={Array.from({ length: teamProps.maxWeek! }, (value, index) => index + 1)} title={"Week"} activeVar={week} setVar={setWeek}></Dropdown> : <></>}
+            {activeTeam ? (
+                <Dropdown
+                    list={Array.from({ length: teamProps.maxWeek! }, (value, index) => index + 1)}
+                    title={"Week"}
+                    activeVar={week}
+                    setVar={setWeek}
+                ></Dropdown>
+            ) : (
+                <></>
+            )}
 
-            {loading ? <SkeletonTeam /> : activeTeam ? <TeamTable team={teamCache ? teamCache[week]?.find((team) => team.id === activeTeam.id) : undefined} boxScore={boxScore} /> : <div></div>}
+            {loading ? (
+                <SkeletonTeam />
+            ) : activeTeam ? (
+                <TeamTable
+                    team={
+                        teamCache
+                            ? teamCache[week]?.find((team) => team.id === activeTeam.id)
+                            : undefined
+                    }
+                    boxScore={boxScore}
+                />
+            ) : (
+                <div></div>
+            )}
         </Layout>
     );
 }

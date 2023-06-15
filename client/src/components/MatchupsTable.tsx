@@ -15,22 +15,43 @@ export default function MatchupsTable(tableProps: IMatchupTableProps) {
         <>
             {tableProps.matchups?.map((matchup: Matchup) => {
                 return (
-                    <div tabIndex={0} className="collapse collapse-arrow join-item border border-base-300 m-10 w-auto">
+                    <div
+                        tabIndex={0}
+                        className="collapse collapse-arrow join-item border border-base-300 my-10 mx-96 w-auto"
+                    >
                         <input
                             type="checkbox"
                             checked={openMatchups.includes(matchup.id)}
                             onChange={() =>
-                                openMatchups.includes(matchup.id) ? setOpenMatchups(openMatchups.filter((matchupId) => matchupId !== matchup.id)) : setOpenMatchups([...openMatchups, matchup.id])
+                                openMatchups.includes(matchup.id)
+                                    ? setOpenMatchups(
+                                          openMatchups.filter(
+                                              (matchupId) => matchupId !== matchup.id
+                                          )
+                                      )
+                                    : setOpenMatchups([...openMatchups, matchup.id])
                             }
                         />
                         <div className="collapse-title font-medium flex flex-row flex-wrap">
                             <div className="text-left w-1/3">
-                                <p className="text-2xl">{tableProps.teams?.find((team) => team.id === matchup.home.teamId)?.name}</p>
+                                <p className="text-2xl">
+                                    {
+                                        tableProps.teams?.find(
+                                            (team) => team.id === matchup.home.teamId
+                                        )?.name
+                                    }
+                                </p>
                                 <p>{matchup.home.totalPoints}</p>
                             </div>
                             <p className="text-center w-1/3">vs</p>
                             <div className="text-right w-1/3">
-                                <p className="text-2xl">{tableProps.teams?.find((team) => team.id === matchup.away.teamId)?.name}</p>
+                                <p className="text-2xl">
+                                    {
+                                        tableProps.teams?.find(
+                                            (team) => team.id === matchup.away.teamId
+                                        )?.name
+                                    }
+                                </p>
                                 <p>{matchup.away.totalPoints}</p>
                             </div>
                         </div>
@@ -47,7 +68,8 @@ export default function MatchupsTable(tableProps: IMatchupTableProps) {
                                         .map((player, index) => {
                                             return (
                                                 <li>
-                                                    {index + 1}. {player.fullName ?? "None"} - {player.weekStats?.appliedTotal.toFixed(1)}
+                                                    {index + 1}. {player.fullName ?? "None"} -{" "}
+                                                    {player.weekStats?.appliedTotal.toFixed(1)}
                                                 </li>
                                             );
                                         })}
@@ -59,14 +81,18 @@ export default function MatchupsTable(tableProps: IMatchupTableProps) {
                                         .map((player, index) => {
                                             return (
                                                 <li>
-                                                    {index + 1}. {player.fullName ?? "None"} - {player.weekStats?.appliedTotal.toFixed(1)}
+                                                    {index + 1}. {player.fullName ?? "None"} -{" "}
+                                                    {player.weekStats?.appliedTotal.toFixed(1)}
                                                 </li>
                                             );
                                         })}
                                 </ul>
                             </div>
                             <div className="mt-5">
-                                <Link className="link link-info" to={"/boxscore/" + matchup.matchupPeriodId + "/" + matchup.id}>
+                                <Link
+                                    className="link link-info"
+                                    to={"/boxscore/" + matchup.matchupPeriodId + "/" + matchup.id}
+                                >
                                     See full box score
                                 </Link>
                             </div>

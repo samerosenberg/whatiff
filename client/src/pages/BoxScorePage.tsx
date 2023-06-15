@@ -23,13 +23,17 @@ export default function BoxScorePage() {
             initCache(parseInt(week)).then((doneLoading) => {
                 setLoading(!doneLoading);
             });
-        } else {
-            setLoading(false);
         }
-        if (!loading && teamCache && matchupCache && week && matchupId) {
-            const matchup = matchupCache[parseInt(week)]?.find((matchup) => matchup.id === parseInt(matchupId));
-            const homeTeam = teamCache[parseInt(week)]?.find((team) => matchup?.home.teamId === team.id);
-            const awayTeam = teamCache[parseInt(week)]?.find((team) => matchup?.away.teamId === team.id);
+        if (teamCache && matchupCache && week && matchupId) {
+            const matchup = matchupCache[parseInt(week)]?.find(
+                (matchup) => matchup.id === parseInt(matchupId)
+            );
+            const homeTeam = teamCache[parseInt(week)]?.find(
+                (team) => matchup?.home.teamId === team.id
+            );
+            const awayTeam = teamCache[parseInt(week)]?.find(
+                (team) => matchup?.away.teamId === team.id
+            );
             setMatchup(matchup);
             setHomeTeam(homeTeam);
             setAwayTeam(awayTeam);
@@ -45,12 +49,16 @@ export default function BoxScorePage() {
         <Layout>
             <div className="flex">
                 <div className="flex flex-col m-10 w-2/5">
-                    <h1 className="flex justify-center font-bold text-2xl mb-5">{homeTeam?.name}</h1>
+                    <h1 className="flex justify-center font-bold text-2xl mb-5">
+                        {homeTeam?.name}
+                    </h1>
                     <TeamTable team={homeTeam} boxScore={matchup?.home} />
                 </div>
                 <div className="flex w-1/5"></div>
                 <div className="flex flex-col m-10 w-2/5">
-                    <h1 className="flex justify-center font-bold text-2xl mb-5">{awayTeam?.name}</h1>
+                    <h1 className="flex justify-center font-bold text-2xl mb-5">
+                        {awayTeam?.name}
+                    </h1>
                     <TeamTable team={awayTeam} boxScore={matchup?.away} />
                 </div>
             </div>

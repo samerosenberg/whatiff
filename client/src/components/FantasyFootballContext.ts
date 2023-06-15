@@ -18,7 +18,10 @@ export const FantasyFootballContext = createContext<IFantasyFootballContext>(bas
 
 interface IFantasyFootballContext {
     headers: { headers: string };
-    config: { params: { leagueId: string; year: number; week: number }; headers: { headers: string } };
+    config: {
+        params: { leagueId: string; year: number; week: number };
+        headers: { headers: string };
+    };
     matchupCache: { [week: number]: Matchup[] | undefined } | undefined;
     setMatchupCache: (cache?: { [week: number]: Matchup[] | undefined }) => void;
     teamCache: { [week: number]: Team[] | undefined } | undefined;

@@ -17,6 +17,7 @@ export default function SchedulePage() {
     const { headers, config, teamCache, setTeamCache, matchupCache, setMatchupCache, initCache } = useContext(FantasyFootballContext);
 
     useEffect(() => {
+        //Run initial load for matchups and teams
         setLoading(true);
         initCache(week).then((doneLoading) => {
             setLoading(!doneLoading);
@@ -26,6 +27,11 @@ export default function SchedulePage() {
         if (matchupCache) {
             const maxWeek = Math.max(...Object.keys(matchupCache!).map(Number));
             for (var matchupWeek = 1; matchupWeek <= maxWeek; matchupWeek++) {
+                setLoading(true);
+                //Load each subsequent weeks teams
+                initCache(matchupWeek).then((doneLoading) => {
+                    setLoading(!doneLoading);
+                });
                 matchupCache[matchupWeek]?.map((matchup) => {
                     if (matchup.away.teamId === activeTeam?.id || matchup.home.teamId === activeTeam?.id) {
                         teamMatchupsTemp.push(matchup);
@@ -34,7 +40,7 @@ export default function SchedulePage() {
             }
         }
         setTeamMatchups(teamMatchupsTemp);
-    }, [loading, week, activeTeam]);
+    }, [loading, activeTeam]);
 
     return (
         <>
@@ -46,7 +52,7 @@ export default function SchedulePage() {
                     setVar={(abbrev: string) => (teamCache ? setActiveTeam(teamCache[week]?.find((team) => team.abbrev === abbrev)) : setActiveTeam(undefined))}
                 ></Dropdown>
 
-                <ScheduleTable activeTeam={activeTeam} matchups={teamMatchups} teams={teamCache ? teamCache[week] : []} />
+                <ScheduleTable activeTeam={activeTeam} matchups={teamMatchups} teams={teamCache ? teamCache : {}} />
             </Layout>
         </>
     );
