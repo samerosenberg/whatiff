@@ -160,7 +160,12 @@ export class Team {
                     topThree.push(starter);
                 } else {
                     topThree.push(starter);
-                    topThree = topThree.sort((player1, player2) => player2.weekStats!.appliedTotal - player1.weekStats!.appliedTotal).slice(0, 3);
+                    topThree = topThree
+                        .sort(
+                            (player1, player2) =>
+                                player2.weekStats!.appliedTotal - player1.weekStats!.appliedTotal
+                        )
+                        .slice(0, 3);
                 }
             }
         }
@@ -185,13 +190,19 @@ export class Team {
                     if (player.eligibleSlots.includes(starter.lineupSlotId)) {
                         if (!maxPlayer) {
                             maxPlayer = player;
-                        } else if ((maxPlayer.weekStats?.appliedTotal ?? 0) < (player.weekStats?.appliedTotal ?? 0)) {
+                        } else if (
+                            (maxPlayer.weekStats?.appliedTotal ?? 0) <
+                            (player.weekStats?.appliedTotal ?? 0)
+                        ) {
                             maxPlayer = player;
                         }
                     }
                 }
                 if (maxPlayer) {
-                    if ((starter.weekStats?.appliedTotal ?? 0) < (maxPlayer.weekStats?.appliedTotal ?? 0)) {
+                    if (
+                        (starter.weekStats?.appliedTotal ?? 0) <
+                        (maxPlayer.weekStats?.appliedTotal ?? 0)
+                    ) {
                         maxRoster[pos] = maxRoster[pos].filter((removePlayer) => {
                             return removePlayer.id !== starter.id;
                         });

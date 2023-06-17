@@ -11,6 +11,7 @@ import { ILeague } from "./helpers/league";
 import { FantasyFootballContext } from "./components/FantasyFootballContext";
 import BoxScorePage from "./pages/BoxScorePage";
 import SchedulePage from "./pages/SchedulePage";
+import MaxPointsPage from "./pages/MaxPointsPage";
 
 axios.defaults.withCredentials = true;
 
@@ -27,6 +28,7 @@ function App() {
         params: { leagueId: leagueInfo.leagueID, year: 2022, week: week },
         headers: headers,
     });
+    const [currentTab, setCurrentTab] = useState("");
 
     useEffect(() => {
         if (!league && headers) {
@@ -108,6 +110,7 @@ function App() {
                 <Route path="schedule" element={<SchedulePage />} />
                 <Route path="matchups" element={<MatchupsPage />} />
                 <Route path="boxscore/:week/:matchupId" element={<BoxScorePage />} />
+                <Route path="/maxpoints" element={<MaxPointsPage />} />
             </Routes>
         </FantasyFootballContext.Provider>
     );

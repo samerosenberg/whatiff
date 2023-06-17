@@ -41,6 +41,16 @@ function api(req, tail) {
         return err;
     });
 }
+app.get("/login", (res, req) => {
+    //Retrieve s2 and SWID
+    axios_1.default.get("https://registerdisney.go.com/jgc/v8/client/ESPN-ONESITE.WEB-PROD/guest/login?langPref=en-US&feature=no-password-reuse"
+    //I believe this just uses {authorization: APIKEY ... }
+    );
+    //Get Leagues
+    //Contains all preferences in a preferences list, type=9 seems to be fantasy league
+    //leagueID = metaData.entry.groups[0].groupId
+    //https://fan.api.espn.com/apis/v2/fans/%7B5CB419A7-9012-4C4C-B419-A790123C4CD4%7D?displayEvents=true&displayNow=true&displayRecs=true&displayHiddenPrefs=true&featureFlags=expandAthlete&featureFlags=isolateEvents&featureFlags=challengeEntries&recLimit=5&showAirings=buy%2Clive%2Creplay
+});
 app.get("/league/", (req, res) => {
     api(req, "?view=mSettings").then((response) => {
         res.send(response);
