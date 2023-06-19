@@ -1,9 +1,7 @@
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import Dropdown from "../components/dropdown";
 import { FantasyFootballContext } from "../components/FantasyFootballContext";
 import Layout from "../components/Layout";
-import MatchupsTable from "../components/MatchupsTable";
 import ScheduleTable from "../components/ScheduleTable";
 import { Matchup } from "../helpers/matchup";
 import { Team } from "../helpers/team";
@@ -14,7 +12,8 @@ export default function SchedulePage() {
     const [activeTeam, setActiveTeam] = useState<Team>();
     const [teamMatchups, setTeamMatchups] = useState<Matchup[]>([]);
 
-    const { headers, config, teamCache, setTeamCache, matchupCache, setMatchupCache, initCache } = useContext(FantasyFootballContext);
+    const { headers, config, teamCache, setTeamCache, matchupCache, setMatchupCache, initCache } =
+        useContext(FantasyFootballContext);
 
     useEffect(() => {
         //Run initial load for matchups and teams
@@ -33,7 +32,10 @@ export default function SchedulePage() {
                     setLoading(!doneLoading);
                 });
                 matchupCache[matchupWeek]?.map((matchup) => {
-                    if (matchup.away.teamId === activeTeam?.id || matchup.home.teamId === activeTeam?.id) {
+                    if (
+                        matchup.away.teamId === activeTeam?.id ||
+                        matchup.home.teamId === activeTeam?.id
+                    ) {
                         teamMatchupsTemp.push(matchup);
                     }
                 });
@@ -49,10 +51,18 @@ export default function SchedulePage() {
                     list={teamCache ? teamCache[week]?.map((team) => team.abbrev) : []}
                     title={"Teams"}
                     activeVar={activeTeam?.abbrev}
-                    setVar={(abbrev: string) => (teamCache ? setActiveTeam(teamCache[week]?.find((team) => team.abbrev === abbrev)) : setActiveTeam(undefined))}
+                    setVar={(abbrev: string) =>
+                        teamCache
+                            ? setActiveTeam(teamCache[week]?.find((team) => team.abbrev === abbrev))
+                            : setActiveTeam(undefined)
+                    }
                 ></Dropdown>
 
-                <ScheduleTable activeTeam={activeTeam} matchups={teamMatchups} teams={teamCache ? teamCache : {}} />
+                <ScheduleTable
+                    activeTeam={activeTeam}
+                    matchups={teamMatchups}
+                    teams={teamCache ? teamCache : {}}
+                />
             </Layout>
         </>
     );

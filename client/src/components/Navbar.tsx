@@ -36,7 +36,7 @@ export default function Navbar() {
                                     <a href="/maxpoints">Max Points</a>
                                 </li>
                                 <li>
-                                    <a>Schedule Change</a>
+                                    <a href="/schedulechange">Schedule Change</a>
                                 </li>
                             </ul>
                         </li>
@@ -63,7 +63,7 @@ export default function Navbar() {
                                     <a href="/maxpoints">Max Points</a>
                                 </li>
                                 <li>
-                                    <a>Schedule Change</a>
+                                    <a href="/schedulechange">Schedule Change</a>
                                 </li>
                             </ul>
                         </details>

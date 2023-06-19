@@ -1,17 +1,80 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Matchup } from "../helpers/matchup";
 import { Team } from "../helpers/team";
 
-export default function MaxPointsTable(tableProps: IMatchupTableProps) {
+export default function MaxPointsTable(tableProps: IMaxPointsTableProps) {
     const [openMatchups, setOpenMatchups] = useState<number[]>([]);
+    const [record, setRecord] = useState("");
+    const [maxPointsPercent, setMaxPointsPercent] = useState(0);
 
-    if (!tableProps.matchups || !tableProps.teams) {
+    useEffect(() => {
+        const team = tableProps.teams[0]?.find(
+            (team: Team) => team.id === tableProps.activeTeam?.id
+        );
+        const recordString = team?.record.overall.wins + " - " + team?.record.overall.losses;
+        setRecord(recordString);
+
+        const maxPointsPercent = team ? team.record.overall.pointsFor / tableProps.maxPoints : 0;
+        setMaxPointsPercent(maxPointsPercent);
+    }, [tableProps.activeTeam, tableProps.maxPoints]);
+
+    if (
+        !tableProps.matchups ||
+        !tableProps.teams ||
+        tableProps.matchups.length === 0 ||
+        !tableProps.activeTeam
+    ) {
         return <div></div>;
     }
 
     return (
         <>
+            <div className="flex pl-4 pr-12">
+                <table className="table mx-96 text-center table-fixed">
+                    <thead className="text-lg text-black">
+                        <tr>
+                            <th>Record</th>
+                            <th>Points For</th>
+                            <th>Points Against</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-base">
+                        <tr>
+                            {tableProps.teams[0] ? (
+                                <td className="w-1/3">
+                                    {record} -{">"} {tableProps.record}
+                                </td>
+                            ) : (
+                                <td className="w-1/3">0-0</td>
+                            )}
+
+                            {tableProps.teams[0] ? (
+                                <td>
+                                    {" "}
+                                    {tableProps.teams[0]
+                                        .find((team: Team) => team.id === tableProps.activeTeam?.id)
+                                        ?.record.overall.pointsFor.toFixed(2)}{" "}
+                                    -{">"} {tableProps.maxPoints.toFixed(2)} {"("}
+                                    {(maxPointsPercent * 100).toFixed(2)}%{")"}
+                                </td>
+                            ) : (
+                                <td>0</td>
+                            )}
+
+                            <td className="w-1/3">
+                                {tableProps.teams[0]
+                                    ? tableProps.teams[0]
+                                          .find(
+                                              (team: Team) => team.id === tableProps.activeTeam?.id
+                                          )
+                                          ?.record.overall.pointsAgainst.toFixed(2)
+                                    : 0}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             {tableProps.matchups?.map((matchup: Matchup) => {
                 return (
                     <>
@@ -42,15 +105,19 @@ export default function MaxPointsTable(tableProps: IMatchupTableProps) {
                                     {matchup.home.teamId === tableProps.activeTeam?.id ? (
                                         <p>
                                             {" "}
-                                            {
-                                                matchup.home.pointsByScoringPeriod[
-                                                    matchup.matchupPeriodId.toString()
-                                                ]
-                                            }{" "}
-                                            -{">"} {matchup.home.totalPoints}{" "}
+                                            {Object.values(matchup.home.pointsByScoringPeriod)
+                                                .reduce((partialSum, score) => partialSum + score)
+                                                .toFixed(2)}{" "}
+                                            -{">"} {matchup.home.totalPoints.toFixed(2)}{" "}
                                         </p>
                                     ) : (
-                                        <p>{matchup.away.totalPoints}</p>
+                                        <p>
+                                            {" "}
+                                            {Object.values(matchup.away.pointsByScoringPeriod)
+                                                .reduce((partialSum, score) => partialSum + score)
+                                                .toFixed(2)}{" "}
+                                            -{">"} {matchup.away.totalPoints.toFixed(2)}{" "}
+                                        </p>
                                     )}
                                 </div>
                                 <p className="text-center w-1/3">vs</p>
@@ -66,8 +133,8 @@ export default function MaxPointsTable(tableProps: IMatchupTableProps) {
                                     </p>
                                     <p>
                                         {matchup.home.teamId === tableProps.activeTeam?.id
-                                            ? matchup.away.totalPoints
-                                            : matchup.home.totalPoints}
+                                            ? matchup.away.totalPoints.toFixed(2)
+                                            : matchup.home.totalPoints.toFixed(2)}
                                     </p>
                                 </div>
                             </div>
@@ -85,7 +152,7 @@ export default function MaxPointsTable(tableProps: IMatchupTableProps) {
                                                 return (
                                                     <li>
                                                         {index + 1}. {player.fullName ?? "None"} -{" "}
-                                                        {player.weekStats?.appliedTotal.toFixed(1)}
+                                                        {player.weekStats?.appliedTotal.toFixed(2)}
                                                     </li>
                                                 );
                                             })}
@@ -98,7 +165,7 @@ export default function MaxPointsTable(tableProps: IMatchupTableProps) {
                                                 return (
                                                     <li>
                                                         {index + 1}. {player.fullName ?? "None"} -{" "}
-                                                        {player.weekStats?.appliedTotal.toFixed(1)}
+                                                        {player.weekStats?.appliedTotal.toFixed(2)}
                                                     </li>
                                                 );
                                             })}
@@ -126,7 +193,9 @@ export default function MaxPointsTable(tableProps: IMatchupTableProps) {
     );
 }
 
-interface IMatchupTableProps {
+interface IMaxPointsTableProps {
+    maxPoints: number;
+    record: string;
     activeTeam: Team | undefined;
     matchups: Matchup[] | undefined;
     teams: { [week: number]: Team[] | undefined };

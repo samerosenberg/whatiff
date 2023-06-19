@@ -3,55 +3,90 @@ import Dropdown from "../components/dropdown";
 import { FantasyFootballContext } from "../components/FantasyFootballContext";
 import Layout from "../components/Layout";
 import MaxPointsTable from "../components/MaxPointsTable";
-import { Matchup } from "../helpers/matchup";
+import { IBoxScore, Matchup } from "../helpers/matchup";
 import { Team } from "../helpers/team";
 
 export default function MaxPointsPage() {
-    const [week, setWeek] = useState(0);
     const [loading, setLoading] = useState(true);
     const [activeTeam, setActiveTeam] = useState<Team>();
     const [teamMatchups, setTeamMatchups] = useState<Matchup[]>([]);
+    const [maxPoints, setMaxPoints] = useState(0);
+    const [newWins, setNewWins] = useState(0);
+    const [newLosses, setNewLosses] = useState(0);
 
     const { headers, config, teamCache, setTeamCache, matchupCache, setMatchupCache, initCache } =
         useContext(FantasyFootballContext);
 
     useEffect(() => {
+        function processBoxScore(
+            boxScore: IBoxScore,
+            isRegularSeason: boolean,
+            oppScore: number
+        ): IBoxScore {
+            const matchupWeeks = Object.keys(boxScore.pointsByScoringPeriod).map((key) =>
+                parseInt(key)
+            );
+            if (
+                teamCache &&
+                matchupWeeks.every((matchupWeek) =>
+                    Object.keys(teamCache)
+                        .map((key) => parseInt(key))
+                        .includes(matchupWeek)
+                )
+            ) {
+                var totalPoints = 0;
+                for (var weekInMatchup of matchupWeeks) {
+                    totalPoints += teamCache[weekInMatchup]![boxScore.teamId - 1]
+                        ? teamCache[weekInMatchup]![boxScore.teamId - 1].getMaxPointsForWeek()
+                              .points
+                        : boxScore.pointsByScoringPeriod[weekInMatchup];
+                }
+                boxScore.totalPoints = totalPoints;
+            }
+            if (isRegularSeason) {
+                if (boxScore.totalPoints > oppScore) {
+                    setNewWins((previousWins) => previousWins + 1);
+                } else {
+                    setNewLosses((previousLosses) => previousLosses + 1);
+                }
+            }
+            setMaxPoints((previousMax) => previousMax + boxScore.totalPoints);
+            return boxScore;
+        }
+
         //Run initial load for matchups and teams
-        setLoading(true);
-        initCache(week).then((doneLoading) => {
-            setLoading(!doneLoading);
-        });
+        const maxWeek = 17;
+        for (var week = 0; week <= maxWeek; week++) {
+            setLoading(true);
+            initCache(week).then((doneLoading) => {
+                setLoading(!doneLoading);
+            });
+        }
 
         const teamMatchupsTemp: Matchup[] = [];
-        if (matchupCache && teamCache) {
+        setMaxPoints(0);
+        //Don't count weeks 15-17
+        setNewWins(0);
+        setNewLosses(0);
+        if (matchupCache && teamCache && activeTeam) {
             const maxWeek = Math.max(...Object.keys(matchupCache!).map(Number));
             for (var matchupWeek = 1; matchupWeek <= maxWeek; matchupWeek++) {
-                setLoading(true);
-                //Load each subsequent weeks teams
-                initCache(matchupWeek).then((doneLoading) => {
-                    setLoading(!doneLoading);
-                });
                 matchupCache[matchupWeek]?.map((matchup) => {
+                    const isRegularSeason = matchup.playoffTierType === "NONE";
                     if (matchup.away.teamId === activeTeam?.id) {
-                        if (teamCache && teamCache[matchup.matchupPeriodId])
-                            matchup.away.totalPoints = teamCache[matchup.matchupPeriodId]![
-                                matchup.away.teamId
-                            ]
-                                ? teamCache[matchup.matchupPeriodId]![
-                                      matchup.away.teamId - 1
-                                  ].getMaxPointsForWeek().points
-                                : matchup.away.totalPoints;
+                        matchup.away = processBoxScore(
+                            matchup.away,
+                            isRegularSeason,
+                            matchup.home.totalPoints
+                        );
                         teamMatchupsTemp.push(matchup);
                     }
                     if (matchup.home.teamId === activeTeam?.id) {
-                        if (teamCache && teamCache[matchup.matchupPeriodId])
-                            matchup.home.totalPoints = teamCache[matchup.matchupPeriodId]![
-                                matchup.home.teamId
-                            ]
-                                ? teamCache[matchup.matchupPeriodId]![
-                                      matchup.home.teamId - 1
-                                  ].getMaxPointsForWeek().points
-                                : matchup.away.totalPoints;
+                        matchup.home = processBoxScore(
+                            matchup.home,
+                            isRegularSeason,
+                            matchup.away.totalPoints
+                        );
                         teamMatchupsTemp.push(matchup);
                     }
                 });
@@ -64,17 +99,19 @@ export default function MaxPointsPage() {
         <>
             <Layout>
                 <Dropdown
-                    list={teamCache ? teamCache[week]?.map((team) => team.abbrev) : []}
+                    list={teamCache ? teamCache[0]?.map((team) => team.abbrev) : []}
                     title={"Teams"}
                     activeVar={activeTeam?.abbrev}
                     setVar={(abbrev: string) =>
                         teamCache
-                            ? setActiveTeam(teamCache[week]?.find((team) => team.abbrev === abbrev))
+                            ? setActiveTeam(teamCache[0]?.find((team) => team.abbrev === abbrev))
                             : setActiveTeam(undefined)
                     }
                 ></Dropdown>
 
                 <MaxPointsTable
+                    record={newWins + " - " + newLosses}
+                    maxPoints={maxPoints}
                     activeTeam={activeTeam}
                     matchups={teamMatchups}
                     teams={teamCache ? teamCache : {}}

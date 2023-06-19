@@ -81,12 +81,12 @@ export interface IBoxScore {
      */
     cumulativeScores: object;
     /**
-     * Follows form: {[week: string] : [points: number]}
+     * Follows form: {[week: number] : [points: number]}
      *
      * @type {object}
      * @memberof IBoxScore
      */
-    pointsByScoringPeriod: { [week: string]: number };
+    pointsByScoringPeriod: { [week: number]: number };
     /**
      * Id of team
      *

@@ -12,6 +12,7 @@ import { FantasyFootballContext } from "./components/FantasyFootballContext";
 import BoxScorePage from "./pages/BoxScorePage";
 import SchedulePage from "./pages/SchedulePage";
 import MaxPointsPage from "./pages/MaxPointsPage";
+import ScheduleChangePage from "./pages/ScheduleChangePage";
 
 axios.defaults.withCredentials = true;
 
@@ -111,6 +112,7 @@ function App() {
                 <Route path="matchups" element={<MatchupsPage />} />
                 <Route path="boxscore/:week/:matchupId" element={<BoxScorePage />} />
                 <Route path="/maxpoints" element={<MaxPointsPage />} />
+                <Route path="/schedulechange" element={<ScheduleChangePage />} />
             </Routes>
         </FantasyFootballContext.Provider>
     );

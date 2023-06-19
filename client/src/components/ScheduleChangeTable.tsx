@@ -1,11 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Route, Routes } from "react-router-dom";
 import { Matchup } from "../helpers/matchup";
 import { Team } from "../helpers/team";
 import BoxScorePage from "../pages/BoxScorePage";
 
-export default function ScheduleTable(tableProps: IMatchupTableProps) {
+export default function ScheduleChangeTable(tableProps: IScheduleChangeTableProps) {
     const [openMatchups, setOpenMatchups] = useState<number[]>([]);
+    const [record, setRecord] = useState("");
+
+    useEffect(() => {
+        const team = tableProps.teams[0]?.find(
+            (team: Team) => team.id === tableProps.activeTeam?.id
+        );
+        const recordString = team?.record.overall.wins + " - " + team?.record.overall.losses;
+        setRecord(recordString);
+    }, [tableProps.activeTeam]);
 
     if (
         !tableProps.matchups ||
@@ -32,23 +41,13 @@ export default function ScheduleTable(tableProps: IMatchupTableProps) {
                             {tableProps.teams[0] ? (
                                 <td className="w-1/3">
                                     {" "}
-                                    {
-                                        tableProps.teams[0].find(
-                                            (team: Team) => team.id === tableProps.activeTeam?.id
-                                        )?.record.overall.wins
-                                    }{" "}
-                                    -{" "}
-                                    {
-                                        tableProps.teams[0].find(
-                                            (team: Team) => team.id === tableProps.activeTeam?.id
-                                        )?.record.overall.losses
-                                    }{" "}
+                                    {record} -{">"} {tableProps.record}{" "}
                                 </td>
                             ) : (
                                 <td className="w-1/3">0-0</td>
                             )}
 
-                            <td>
+                            <td className="w-1/3">
                                 {tableProps.teams[0]
                                     ? tableProps.teams[0]
                                           .find(
@@ -57,14 +56,21 @@ export default function ScheduleTable(tableProps: IMatchupTableProps) {
                                           ?.record.overall.pointsFor.toFixed(2)
                                     : 0}
                             </td>
-                            <td className="w-1/3">
-                                {tableProps.teams[0]
-                                    ? tableProps.teams[0]
-                                          .find(
-                                              (team: Team) => team.id === tableProps.activeTeam?.id
-                                          )
-                                          ?.record.overall.pointsAgainst.toFixed(2)
-                                    : 0}
+                            <td>
+                                {tableProps.teams[0] ? (
+                                    <td>
+                                        {" "}
+                                        {tableProps.teams[0]
+                                            .find(
+                                                (team: Team) =>
+                                                    team.id === tableProps.activeTeam?.id
+                                            )
+                                            ?.record.overall.pointsAgainst.toFixed(2)}{" "}
+                                        -{">"} {tableProps.pointsAgainst.toFixed(2)}
+                                    </td>
+                                ) : (
+                                    <td>0</td>
+                                )}
                             </td>
                         </tr>
                     </tbody>
@@ -175,7 +181,9 @@ export default function ScheduleTable(tableProps: IMatchupTableProps) {
     );
 }
 
-interface IMatchupTableProps {
+interface IScheduleChangeTableProps {
+    pointsAgainst: number;
+    record: string;
     activeTeam: Team | undefined;
     matchups: Matchup[] | undefined;
     teams: { [week: number]: Team[] | undefined };
