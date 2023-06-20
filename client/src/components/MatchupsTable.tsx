@@ -32,7 +32,7 @@ export default function MatchupsTable(tableProps: IMatchupTableProps) {
                                     : setOpenMatchups([...openMatchups, matchup.id])
                             }
                         />
-                        <div className="collapse-title font-medium flex flex-row flex-wrap">
+                        <div className="collapse-title font-medium flex flex-row flex-wrap items-center pr-12 py-2">
                             <div className="text-left w-1/3">
                                 <p className="text-2xl">
                                     {
@@ -55,7 +55,7 @@ export default function MatchupsTable(tableProps: IMatchupTableProps) {
                                 <p>{matchup.away.totalPoints}</p>
                             </div>
                         </div>
-                        <div className="collapse-content">
+                        <div className="collapse-content h-auto">
                             <div className="flex">
                                 <p className="text-left w-1/2 font-bold mt-2">Top Scorers</p>
                                 <p className="text-right w-1/2 font-bold mt-2">Top Scorers</p>

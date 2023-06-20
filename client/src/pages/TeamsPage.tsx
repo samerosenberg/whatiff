@@ -39,27 +39,31 @@ export default function TeamsPage(teamProps: ITeamProps) {
 
     return (
         <Layout>
-            <Dropdown
-                list={teamCache ? teamCache[week]?.map((team) => team.abbrev) : []}
-                title={"Teams"}
-                activeVar={activeTeam?.abbrev}
-                setVar={(abbrev: string) =>
-                    teamCache
-                        ? setActiveTeam(teamCache[week]?.find((team) => team.abbrev === abbrev))
-                        : setActiveTeam(undefined)
-                }
-            ></Dropdown>
-            {activeTeam ? (
+            <div className="flex flex-row">
                 <Dropdown
-                    list={Array.from({ length: teamProps.maxWeek! }, (value, index) => index + 1)}
-                    title={"Week"}
-                    activeVar={week}
-                    setVar={setWeek}
+                    list={teamCache ? teamCache[week]?.map((team) => team.abbrev) : []}
+                    title={"Teams"}
+                    activeVar={activeTeam?.abbrev}
+                    setVar={(abbrev: string) =>
+                        teamCache
+                            ? setActiveTeam(teamCache[week]?.find((team) => team.abbrev === abbrev))
+                            : setActiveTeam(undefined)
+                    }
                 ></Dropdown>
-            ) : (
-                <></>
-            )}
-
+                {activeTeam ? (
+                    <Dropdown
+                        list={Array.from(
+                            { length: teamProps.maxWeek! },
+                            (value, index) => index + 1
+                        )}
+                        title={"Week"}
+                        activeVar={week}
+                        setVar={setWeek}
+                    ></Dropdown>
+                ) : (
+                    <></>
+                )}
+            </div>
             {loading ? (
                 <SkeletonTeam />
             ) : activeTeam ? (

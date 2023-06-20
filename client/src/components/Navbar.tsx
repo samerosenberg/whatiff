@@ -45,7 +45,7 @@ export default function Navbar() {
                         </li>
                     </ul>
                 </div>
-                <a className="font-bold ml-2 normal-case text-xl text-white">WhatIFF</a>
+                <a className="font-bold ml-2 normal-case text-xl text-white" href="/">WhatIFF</a>
             </div>
             <div className="navbar-center w-1/3 justify-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1 text-white">

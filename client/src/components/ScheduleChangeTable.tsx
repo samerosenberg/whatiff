@@ -99,7 +99,7 @@ export default function ScheduleChangeTable(tableProps: IScheduleChangeTableProp
                                         : setOpenMatchups([...openMatchups, matchup.id])
                                 }
                             />
-                            <div className="collapse-title font-medium flex flex-row flex-wrap">
+                            <div className="collapse-title font-medium flex flex-row flex-wrap items-center">
                                 <div className="text-left w-1/3">
                                     <p className="text-2xl">{tableProps.activeTeam?.name}</p>
                                     <p>

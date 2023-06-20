@@ -13,36 +13,38 @@ import BoxScorePage from "./pages/BoxScorePage";
 import SchedulePage from "./pages/SchedulePage";
 import MaxPointsPage from "./pages/MaxPointsPage";
 import ScheduleChangePage from "./pages/ScheduleChangePage";
+import Home from "./pages/Home";
 
 axios.defaults.withCredentials = true;
 
 function App() {
-    const [isLoading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(false);
     const [teamCache, setTeamCache] = useState<{ [week: number]: Team[] | undefined }>();
     const [matchupCache, setMatchupCache] = useState<{ [week: number]: Matchup[] | undefined }>();
-    const [league, setLeague] = useState<ILeague>();
+    const [league, setLeague] = useState<ILeague>(
+        localStorage.getItem("league") ? JSON.parse(localStorage.getItem("league")!) : undefined
+    );
     const week = 0;
-    const [headers, setHeaders] = useState({
-        headers: `{"Cookie": "espn_s2=${leagueInfo.espn_s2}; SWID=${leagueInfo.swid};"}`,
-    });
-    const [config, setConfig] = useState({
-        params: { leagueId: leagueInfo.leagueID, year: 2022, week: week },
-        headers: headers,
-    });
-    const [currentTab, setCurrentTab] = useState("");
+    const [headers, setHeaders] = useState<{ headers: string }>(
+        localStorage.getItem("headers") ? JSON.parse(localStorage.getItem("headers")!) : undefined
+    );
+    const [config, setConfig] = useState<{
+        params: { leagueId: string; year: number; week: number };
+        headers: { headers: string };
+    }>(localStorage.getItem("config") ? JSON.parse(localStorage.getItem("config")!) : undefined);
 
     useEffect(() => {
-        if (!league && headers) {
-            axios
-                .get("/league", config)
-                .then((res) => {
-                    setLeague(res.data);
-                    setLoading(false);
-                })
-                .catch((err) => {
-                    setLoading(false);
-                });
-        }
+        // if (!league && headers) {
+        //     axios
+        //         .get("/league", config)
+        //         .then((res) => {
+        //             setLeague(res.data);
+        //             setLoading(false);
+        //         })
+        //         .catch((err) => {
+        //             setLoading(false);
+        //         });
+        // }
     }, []);
 
     async function initCache(week: number): Promise<boolean> {
@@ -75,14 +77,47 @@ function App() {
     }
 
     async function getTeams(week: number): Promise<boolean> {
-        config.params.week = week;
-        return axios.get("/teams", config).then((res: any) => {
-            setTeamCache((previousTeams) => ({
-                ...previousTeams,
-                [week]: res.data.teams.map((team: ITeam) => new Team(team, week)),
-            }));
-            return true;
-        });
+        if (config) {
+            config.params.week = week;
+            return axios.get("/teams", config).then((res: any) => {
+                setTeamCache((previousTeams) => ({
+                    ...previousTeams,
+                    [week]: res.data.teams.map((team: ITeam) => new Team(team, week)),
+                }));
+                return true;
+            });
+        }
+        return false;
+    }
+
+    function login(leagueId: string, swid: string, espns2: string): Promise<boolean> {
+        const headers = {
+            headers: `{"Cookie": "espn_s2=${espns2}; SWID=${swid};"}`,
+        };
+        setHeaders(headers);
+        localStorage.setItem("headers", JSON.stringify(headers));
+        const config = {
+            params: { leagueId: leagueId, year: 2022, week: week },
+            headers: headers,
+        };
+        setConfig(config);
+        localStorage.setItem("config", JSON.stringify(config));
+        if (league) {
+            return Promise.resolve(true);
+        }
+        if (!league && headers) {
+            return axios
+                .get("/league", config)
+                .then((res) => {
+                    setLeague(res.data);
+                    localStorage.setItem("league", JSON.stringify(res.data));
+                    return true;
+                })
+                .catch((err) => {
+                    return false;
+                });
+        }
+        return Promise.resolve(false);
     }
 
     //TODO Add better loading screen
@@ -104,15 +139,16 @@ function App() {
         >
             <Navbar />
             <Routes>
+                <Route path="/" element={<Home login={login} />} />
                 <Route
                     path="teams"
-                    element={<TeamsPage maxWeek={league?.status.finalScoringPeriod} />}
+                    element={<TeamsPage maxWeek={league?.status?.finalScoringPeriod} />}
                 />
                 <Route path="schedule" element={<SchedulePage />} />
                 <Route path="matchups" element={<MatchupsPage />} />
                 <Route path="boxscore/:week/:matchupId" element={<BoxScorePage />} />
-                <Route path="/maxpoints" element={<MaxPointsPage />} />
-                <Route path="/schedulechange" element={<ScheduleChangePage />} />
+                <Route path="maxpoints" element={<MaxPointsPage />} />
+                <Route path="schedulechange" element={<ScheduleChangePage />} />
             </Routes>
         </FantasyFootballContext.Provider>
     );
