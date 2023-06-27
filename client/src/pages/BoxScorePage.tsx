@@ -1,9 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Dropdown from "../components/dropdown";
 import { FantasyFootballContext } from "../components/FantasyFootballContext";
 import Layout from "../components/Layout";
-import MatchupsTable from "../components/MatchupsTable";
 import TeamTable from "../components/TeamTable";
 import { Matchup } from "../helpers/matchup";
 import { Team } from "../helpers/team";

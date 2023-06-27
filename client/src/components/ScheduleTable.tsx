@@ -19,7 +19,7 @@ export default function ScheduleTable(tableProps: IMatchupTableProps) {
     return (
         <>
             <div className="flex pl-4 pr-12">
-                <table className="table mx-96 text-center table-fixed">
+                <table className="table mx-[20vw] min-w-[400px] text-center table-fixed">
                     <thead className="text-lg text-black">
                         <tr>
                             <th>Record</th>
@@ -73,12 +73,12 @@ export default function ScheduleTable(tableProps: IMatchupTableProps) {
             {tableProps.matchups?.map((matchup: Matchup) => {
                 return (
                     <>
-                        <h1 className="m-10 ml-80 font-bold text-xl">
+                        <h1 className="m-5 ml-[18vw] font-bold text-xl">
                             Week {matchup.matchupPeriodId}{" "}
                         </h1>
                         <div
                             tabIndex={0}
-                            className="collapse collapse-arrow join-item border border-base-300 my-10 mx-96 w-auto"
+                            className="collapse collapse-arrow join-item border border-base-300 my-10 mx-[20vw] w-auto min-w-[400px]"
                         >
                             <input
                                 type="checkbox"

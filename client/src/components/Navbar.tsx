@@ -2,7 +2,7 @@ export default function Navbar() {
     return (
         <div className="navbar bg-black">
             <div className="navbar-start w-1/3">
-                <div className="dropdown">
+                <div className="dropdown z-10">
                     <label tabIndex={0} className="btn btn-ghost lg:hidden">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +45,9 @@ export default function Navbar() {
                         </li>
                     </ul>
                 </div>
-                <a className="font-bold ml-2 normal-case text-xl text-white" href="/">WhatIFF</a>
+                <a className="font-bold ml-2 normal-case text-xl text-white" href="/">
+                    WhatIFF
+                </a>
             </div>
             <div className="navbar-center w-1/3 justify-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1 text-white">

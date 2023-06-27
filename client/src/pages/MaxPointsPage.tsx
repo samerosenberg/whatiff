@@ -49,8 +49,8 @@ export default function MaxPointsPage() {
                 } else {
                     setNewLosses((previousLosses) => previousLosses + 1);
                 }
+                setMaxPoints((previousMax) => previousMax + boxScore.totalPoints);
             }
-            setMaxPoints((previousMax) => previousMax + boxScore.totalPoints);
             return boxScore;
         }
 

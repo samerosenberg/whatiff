@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Matchup } from "../helpers/matchup";
 import { Team } from "../helpers/team";
-import BoxScorePage from "../pages/BoxScorePage";
 
 export default function MatchupsTable(tableProps: IMatchupTableProps) {
     const [openMatchups, setOpenMatchups] = useState<number[]>([]);
@@ -17,7 +16,7 @@ export default function MatchupsTable(tableProps: IMatchupTableProps) {
                 return (
                     <div
                         tabIndex={0}
-                        className="collapse collapse-arrow join-item border border-base-300 my-10 mx-96 w-auto"
+                        className="collapse collapse-arrow border border-base-300 my-10 mx-[20vw] w-auto min-w-[400px] h-auto"
                     >
                         <input
                             type="checkbox"
@@ -55,7 +54,7 @@ export default function MatchupsTable(tableProps: IMatchupTableProps) {
                                 <p>{matchup.away.totalPoints}</p>
                             </div>
                         </div>
-                        <div className="collapse-content h-auto">
+                        <div className="collapse-content">
                             <div className="flex">
                                 <p className="text-left w-1/2 font-bold mt-2">Top Scorers</p>
                                 <p className="text-right w-1/2 font-bold mt-2">Top Scorers</p>

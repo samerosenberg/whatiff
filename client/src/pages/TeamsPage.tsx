@@ -38,47 +38,52 @@ export default function TeamsPage(teamProps: ITeamProps) {
     }, [activeTeam, week, loading]);
 
     return (
-        <Layout>
-            <div className="flex flex-row">
-                <Dropdown
-                    list={teamCache ? teamCache[week]?.map((team) => team.abbrev) : []}
-                    title={"Teams"}
-                    activeVar={activeTeam?.abbrev}
-                    setVar={(abbrev: string) =>
-                        teamCache
-                            ? setActiveTeam(teamCache[week]?.find((team) => team.abbrev === abbrev))
-                            : setActiveTeam(undefined)
-                    }
-                ></Dropdown>
-                {activeTeam ? (
+        <>
+            <h1 className="ml-5 mt-5 font-bold text-4xl text-center">Teams</h1>
+            <Layout>
+                <div className="flex flex-row">
                     <Dropdown
-                        list={Array.from(
-                            { length: teamProps.maxWeek! },
-                            (value, index) => index + 1
-                        )}
-                        title={"Week"}
-                        activeVar={week}
-                        setVar={setWeek}
+                        list={teamCache ? teamCache[week]?.map((team) => team.abbrev) : []}
+                        title={"Teams"}
+                        activeVar={activeTeam?.abbrev}
+                        setVar={(abbrev: string) =>
+                            teamCache
+                                ? setActiveTeam(
+                                      teamCache[week]?.find((team) => team.abbrev === abbrev)
+                                  )
+                                : setActiveTeam(undefined)
+                        }
                     ></Dropdown>
+                    {activeTeam ? (
+                        <Dropdown
+                            list={Array.from(
+                                { length: teamProps.maxWeek! },
+                                (value, index) => index + 1
+                            )}
+                            title={"Week"}
+                            activeVar={week}
+                            setVar={setWeek}
+                        ></Dropdown>
+                    ) : (
+                        <></>
+                    )}
+                </div>
+                {loading ? (
+                    <SkeletonTeam />
+                ) : activeTeam ? (
+                    <TeamTable
+                        team={
+                            teamCache
+                                ? teamCache[week]?.find((team) => team.id === activeTeam.id)
+                                : undefined
+                        }
+                        boxScore={boxScore}
+                    />
                 ) : (
-                    <></>
+                    <div></div>
                 )}
-            </div>
-            {loading ? (
-                <SkeletonTeam />
-            ) : activeTeam ? (
-                <TeamTable
-                    team={
-                        teamCache
-                            ? teamCache[week]?.find((team) => team.id === activeTeam.id)
-                            : undefined
-                    }
-                    boxScore={boxScore}
-                />
-            ) : (
-                <div></div>
-            )}
-        </Layout>
+            </Layout>
+        </>
     );
 }
 

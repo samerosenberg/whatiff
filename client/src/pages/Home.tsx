@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 
 export default function Home(homeProps: IHomeProps) {
@@ -6,6 +6,21 @@ export default function Home(homeProps: IHomeProps) {
     const [swid, setSWID] = useState("");
     const [espns2, setESPNS2] = useState("");
     const [success, setSuccess] = useState<boolean>();
+
+    useEffect(() => {
+        const cookies = localStorage.getItem("headers")
+            ? JSON.parse(localStorage.getItem("headers")!).headers
+            : undefined;
+        if (cookies) {
+            setESPNS2(cookies.split(";")[0].split("=")[1]);
+            setSWID(cookies.split(";")[1].split("=")[1]);
+        }
+        setLeagueId(
+            localStorage.getItem("league")
+                ? JSON.parse(localStorage.getItem("league")!).id
+                : undefined
+        );
+    }, []);
 
     return (
         <Layout className="items-center">
@@ -39,6 +54,7 @@ export default function Home(homeProps: IHomeProps) {
                         type="text"
                         placeholder="League ID"
                         className="input input-bordered w-full max-w-xs"
+                        value={leagueId}
                         onChange={(e) => setLeagueId(e.target.value)}
                     />
                 </div>
@@ -50,6 +66,7 @@ export default function Home(homeProps: IHomeProps) {
                         type="text"
                         placeholder="SWID"
                         className="input input-bordered w-full max-w-xs"
+                        value={swid}
                         onChange={(e) => setSWID(e.target.value)}
                     />
                 </div>
@@ -61,6 +78,7 @@ export default function Home(homeProps: IHomeProps) {
                         type="text"
                         placeholder="ESPN S2"
                         className="input input-bordered w-full max-w-xs"
+                        value={espns2}
                         onChange={(e) => setESPNS2(e.target.value)}
                     />
                 </div>
@@ -73,10 +91,14 @@ export default function Home(homeProps: IHomeProps) {
             >
                 Connect
             </button>
-            {success ? (
-                <p>You successfully connected to the league {leagueId} </p>
+            {success !== undefined ? (
+                success ? (
+                    <p>You successfully connected to the league {leagueId} </p>
+                ) : (
+                    <p>Connection failed</p>
+                )
             ) : (
-                <p>Connection failed</p>
+                <></>
             )}
         </Layout>
     );
