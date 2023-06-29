@@ -93,14 +93,14 @@ function App() {
         return false;
     }
 
-    function login(leagueId: string, swid: string, espns2: string): Promise<boolean> {
+    function login(leagueId: string, swid: string, espns2: string, year: number): Promise<boolean> {
         const headers = {
             headers: `{"Cookie": "espn_s2=${espns2}; SWID=${swid};"}`,
         };
         setHeaders(headers);
         localStorage.setItem("headers", JSON.stringify(headers));
         const config = {
-            params: { leagueId: leagueId, year: 2022, week: week },
+            params: { leagueId: leagueId, year: year, week: week },
             headers: headers,
         };
         setConfig(config);

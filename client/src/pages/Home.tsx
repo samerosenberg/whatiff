@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
+import Dropdown from "../components/dropdown";
 import Layout from "../components/Layout";
+import { ILeague } from "../helpers/league";
 
 export default function Home(homeProps: IHomeProps) {
     const [leagueId, setLeagueId] = useState("");
     const [swid, setSWID] = useState("");
     const [espns2, setESPNS2] = useState("");
     const [success, setSuccess] = useState<boolean>();
+    const [league, setLeague] = useState<ILeague>(
+        localStorage.getItem("league") ? JSON.parse(localStorage.getItem("league")!) : undefined
+    );
+    const [leagueName, setLeagueName] = useState("");
+    const [year, setYear] = useState(0);
 
     useEffect(() => {
         const cookies = localStorage.getItem("headers")
@@ -20,7 +27,11 @@ export default function Home(homeProps: IHomeProps) {
                 ? JSON.parse(localStorage.getItem("league")!).id
                 : undefined
         );
-    }, []);
+
+        if (success && league) {
+            setLeagueName(league.settings.name);
+        }
+    }, [success]);
 
     return (
         <Layout className="items-center">
@@ -70,7 +81,7 @@ export default function Home(homeProps: IHomeProps) {
                         onChange={(e) => setSWID(e.target.value)}
                     />
                 </div>
-                <div className="form-control max-w-xs">
+                <div className="form-control max-w-xs mb-2">
                     <label className="label">
                         <span className="label-text">ESPN S2:</span>{" "}
                     </label>
@@ -82,18 +93,34 @@ export default function Home(homeProps: IHomeProps) {
                         onChange={(e) => setESPNS2(e.target.value)}
                     />
                 </div>
+                <div className="form-control max-w-xs">
+                    <label className="label">
+                        <span className="label-text">Year:</span>{" "}
+                    </label>
+                    <Dropdown
+                        list={Array.from(
+                            { length: new Date().getFullYear() - 2018 },
+                            (v, k) => new Date().getFullYear() - k
+                        )}
+                        title={"Year"}
+                        activeVar={year}
+                        setVar={setYear}
+                    ></Dropdown>
+                </div>
             </div>
             <button
-                className="btn btn-success mt-10"
+                className="btn btn-success mt-10 mb-2"
                 onClick={() =>
-                    homeProps.login(leagueId, swid, espns2).then((res) => setSuccess(res))
+                    homeProps.login(leagueId, swid, espns2, year).then((res) => setSuccess(res))
                 }
             >
                 Connect
             </button>
             {success !== undefined ? (
                 success ? (
-                    <p>You successfully connected to the league {leagueId} </p>
+                    <>
+                        <p>You successfully connected to the league {leagueName} </p>
+                    </>
                 ) : (
                     <p>Connection failed</p>
                 )
@@ -105,5 +132,5 @@ export default function Home(homeProps: IHomeProps) {
 }
 
 interface IHomeProps {
-    login: (leagueId: string, swid: string, espns2: string) => Promise<boolean>;
+    login: (leagueId: string, swid: string, espns2: string, year: number) => Promise<boolean>;
 }
