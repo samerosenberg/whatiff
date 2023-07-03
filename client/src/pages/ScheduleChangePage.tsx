@@ -86,6 +86,7 @@ export default function ScheduleChangePage() {
 
     return (
         <>
+            <h1 className="ml-5 mt-5 font-bold text-4xl text-center">WhatIFF: Schedule Change</h1>
             <Layout>
                 <div className="flex">
                     <Dropdown

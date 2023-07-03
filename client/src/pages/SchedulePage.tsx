@@ -46,6 +46,7 @@ export default function SchedulePage() {
 
     return (
         <>
+            <h1 className="ml-5 mt-5 font-bold text-4xl text-center">Schedule</h1>
             <Layout>
                 <Dropdown
                     list={teamCache ? teamCache[week]?.map((team) => team.abbrev) : []}

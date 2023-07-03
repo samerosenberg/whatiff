@@ -21,6 +21,7 @@ export default function MatchupsPage() {
 
     return (
         <>
+            <h1 className="ml-5 mt-5 font-bold text-4xl text-center">Matchups</h1>
             <Layout>
                 <Dropdown
                     list={

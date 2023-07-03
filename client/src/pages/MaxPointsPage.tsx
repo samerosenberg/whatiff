@@ -97,6 +97,7 @@ export default function MaxPointsPage() {
 
     return (
         <>
+            <h1 className="ml-5 mt-5 font-bold text-4xl text-center">WhatIFF: Max Points</h1>
             <Layout>
                 <Dropdown
                     list={teamCache ? teamCache[0]?.map((team) => team.abbrev) : []}

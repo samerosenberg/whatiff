@@ -42,7 +42,6 @@ export default function BoxScorePage() {
         return <div>Silly, you forgot the matchup id</div>;
     }
 
-    //TODO Fix bye week stats
     return (
         <Layout>
             <div className="flex">
