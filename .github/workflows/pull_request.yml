@@ -56,3 +56,5 @@ jobs:
 
                   # Update the pull request with the modified body
                   gh pr edit $PR_NUMBER --body "$UPDATED_BODY"
+              env: 
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
