@@ -1,78 +1,58 @@
 name: Update PR Template with JIRA Link
 
 on:
-  pull_request:
-    types: [opened, reopened]
+    pull_request:
+        types: [opened, reopened]
 
 jobs:
-  update-pr:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    update-pr:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
 
-      - name: Get branch name and extract JIRA ID
-        id: jira_id
-        run: |
-          # Get the branch name from the environment
-          BRANCH_NAME=$(echo "${{ github.head_ref }}")
-          
-          # Extract JIRA ID in the form DEV-XXXXX
-          JIRA_ID=$(echo "$BRANCH_NAME" | grep -oP 'DEV-\d+')
-          
-          # Fail if no JIRA ID found
-          if [ -z "$JIRA_ID" ]; then
-            echo "No JIRA ID found in the branch name. Exiting."
-            exit 1
-          fi
-          
-          # Print and set the JIRA ID
-          echo "JIRA ID: $JIRA_ID"
-          echo "::set-output name=jira_id::$JIRA_ID"
-          
-      - name: Create JIRA link
-        id: create_link
-        run: |
-          # Using the JIRA ID from previous step to create a JIRA link
-          JIRA_ID="${{ steps.jira_id.outputs.jira_id }}"
-          JIRA_URL="https://your-jira-instance.com/browse/$JIRA_ID"
-          
-          echo "JIRA Link: $JIRA_URL"
-          echo "::set-output name=jira_url::$JIRA_URL"
+            - name: Get branch name and extract JIRA ID
+              id: jira_id
+              run: |
+                  # Get the branch name from the environment
+                  BRANCH_NAME=$(echo "${{ github.head_ref }}")
 
-      - name: Get pull request description
-        id: get_pr
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const prNumber = context.issue.number;
-            const { data: pullRequest } = await github.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber,
-            });
+                  # Extract JIRA ID in the form DEV-XXXXX
+                  JIRA_ID=$(echo "$BRANCH_NAME" | grep -oP 'DEV-\d+')
 
-            // Set the PR body as an output
-            return { body: pullRequest.body };
+                  # Fail if no JIRA ID found
+                  if [ -z "$JIRA_ID" ]; then
+                    echo "No JIRA ID found in the branch name. Exiting."
+                    exit 1
+                  fi
 
-      - name: Replace placeholder in PR description
-        id: update_pr
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const prNumber = context.issue.number;
-            const prBody = `{{ steps.get_pr.outputs.body }}`;
+                  # Print and set the JIRA ID
+                  echo "JIRA ID: $JIRA_ID"
+                  echo "jira_id=$JIRA_ID" >> $GITHUB_OUTPUT
 
-            // JIRA URL from the previous step
-            const jiraLink = `https://your-jira-instance.com/browse/{{ steps.create_link.outputs.jira_url }}`;
+            - name: Create JIRA link
+              id: create_link
+              run: |
+                  # Using the JIRA ID from previous step to create a JIRA link
+                  JIRA_ID="${{ steps.jira_id.outputs.jira_id }}"
+                  JIRA_URL="https://your-jira-instance.com/browse/$JIRA_ID"
 
-            // Replace the placeholder 'JIRA_LINK' in the body with the actual JIRA link
-            const updatedBody = prBody.replace('JIRA_LINK', jiraLink);
+                  echo "JIRA Link: $JIRA_URL"
+                  echo "jira_url=$JIRA_URL" >> $GITHUB_OUTPUT
 
-            // Update the PR with the modified body
-            await github.pulls.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber,
-              body: updatedBody,
-            });
+            - name: Update PR description with JIRA link using GitHub CLI
+              run: |
+                  # Get the pull request number
+                  PR_NUMBER="${{ github.event.pull_request.number }}"
+
+                  # JIRA link generated from previous steps
+                  JIRA_URL="${{ steps.create_link.outputs.jira_url }}"
+
+                  # Get the current pull request body
+                  PR_BODY=$(gh pr view $PR_NUMBER --json body --jq ".body")
+
+                  # Replace the placeholder 'JIRA_LINK' with the actual JIRA link
+                  UPDATED_BODY=$(echo "$PR_BODY" | sed "s/JIRA_LINK/$JIRA_URL/g")
+
+                  # Update the pull request with the modified body
+                  gh pr edit $PR_NUMBER --body "$UPDATED_BODY"
