@@ -161,9 +161,10 @@ export class Team {
                 } else {
                     topThree.push(starter);
                     topThree = topThree
-                        .sort(
-                            (player1, player2) =>
-                                player2.weekStats!.appliedTotal - player1.weekStats!.appliedTotal
+                        .sort((player1, player2) =>
+                            player1.weekStats && player2.weekStats
+                                ? player2.weekStats.appliedTotal - player1.weekStats.appliedTotal
+                                : 0
                         )
                         .slice(0, 3);
                 }

@@ -23,6 +23,9 @@ export default function MaxPointsPage() {
             isRegularSeason: boolean,
             oppScore: number
         ): IBoxScore {
+            if (!boxScore.pointsByScoringPeriod) {
+                return boxScore;
+            }
             const matchupWeeks = Object.keys(boxScore.pointsByScoringPeriod).map((key) =>
                 parseInt(key)
             );
@@ -68,7 +71,7 @@ export default function MaxPointsPage() {
         //Don't count weeks 15-17
         setNewWins(0);
         setNewLosses(0);
-        if (matchupCache && teamCache && activeTeam) {
+        if (matchupCache && teamCache && activeTeam && !loading) {
             const maxWeek = Math.max(...Object.keys(matchupCache!).map(Number));
             for (var matchupWeek = 1; matchupWeek <= maxWeek; matchupWeek++) {
                 matchupCache[matchupWeek]?.map((matchup) => {

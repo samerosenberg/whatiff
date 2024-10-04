@@ -86,7 +86,7 @@ export interface IBoxScore {
      * @type {object}
      * @memberof IBoxScore
      */
-    pointsByScoringPeriod: { [week: number]: number };
+    pointsByScoringPeriod: { [week: number]: number } | undefined;
     /**
      * Id of team
      *
