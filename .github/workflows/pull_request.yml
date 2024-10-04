@@ -52,7 +52,7 @@ jobs:
                   PR_BODY=$(gh pr view $PR_NUMBER --json body --jq ".body")
 
                   # Replace the placeholder 'JIRA_LINK' with the actual JIRA link
-                  UPDATED_BODY=$(echo "$PR_BODY" | sed "s/JIRA_LINK/$JIRA_URL/g")
+                  UPDATED_BODY=$(echo "$PR_BODY" | sed "s|JIRA_LINK|$JIRA_URL|g")
 
                   # Update the pull request with the modified body
                   gh pr edit $PR_NUMBER --body "$UPDATED_BODY"
