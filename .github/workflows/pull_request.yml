@@ -22,7 +22,7 @@ jobs:
                   BRANCH_NAME=$(echo "${{ github.head_ref }}")
 
                   # Extract JIRA ID in the form DEV-XXXXX
-                  JIRA_ID=$(echo "$BRANCH_NAME" | grep -oP 'DEV-\d+')
+                  JIRA_ID=$(echo "$BRANCH_NAME" | grep -oP '[Dd][Ee][Vv]-\d+')
 
                   # Fail if no JIRA ID found
                   if [ -z "$JIRA_ID" ]; then
