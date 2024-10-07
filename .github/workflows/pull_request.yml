@@ -7,6 +7,8 @@ on:
 jobs:
     update-pr:
         runs-on: ubuntu-latest
+        permissions:
+            pull-requests: write
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
@@ -56,5 +58,5 @@ jobs:
 
                   # Update the pull request with the modified body
                   gh pr edit $PR_NUMBER --body "$UPDATED_BODY"
-              env: 
+              env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
