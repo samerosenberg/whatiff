@@ -2,7 +2,6 @@ name: Update PR Template with JIRA Link
 
 on:
     pull_request:
-        types: [opened, reopened]
 
 jobs:
     update-pr:
@@ -22,7 +21,7 @@ jobs:
                   BRANCH_NAME=$(echo "${{ github.head_ref }}")
 
                   # Extract JIRA ID in the form DEV-XXXXX
-                  JIRA_ID=$(echo "$BRANCH_NAME" | grep -oP 'DEV-\d+')
+                  JIRA_ID=$(echo "$BRANCH_NAME" | grep -oP '[Dd][Ee][Vv]-\d+')
 
                   # Fail if no JIRA ID found
                   if [ -z "$JIRA_ID" ]; then
@@ -56,7 +55,11 @@ jobs:
                   PR_BODY=$(gh pr view $PR_NUMBER --json body --jq ".body")
 
                   # Replace the placeholder 'JIRA_LINK' with the actual JIRA link
-                  UPDATED_BODY="#$JIRA_URL<br>something else<br>$pr_body"
+                  UPDATED_BODY="# $JIRA_URL
+
+                  something else
+
+                  $PR_BODY"
 
                   # Update the pull request with the modified body
                   gh pr edit $PR_NUMBER --body "$UPDATED_BODY"
