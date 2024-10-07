@@ -13,7 +13,7 @@ const app = (0, express_1.default)();
 //         Accept: "application/json",
 //     },
 // };
-const baseURL = "https://fantasy.espn.com/apis/v3/games/ffl/seasons/";
+const baseURL = "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/";
 const mid = "/segments/0/leagues/";
 function createRoute(leagueId, year, tail) {
     return baseURL + year + mid + leagueId + tail;

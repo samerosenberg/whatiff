@@ -22,7 +22,11 @@ export default function ScheduleChangePage() {
 
     useEffect(() => {
         function processMatchup(newMatchup: Matchup) {
-            if (newMatchup.playoffTierType === "NONE") {
+            if (
+                newMatchup.playoffTierType === "NONE" &&
+                newMatchup.home.totalPoints > 0 &&
+                newMatchup.away.totalPoints > 0
+            ) {
                 if (newMatchup.home.totalPoints >= newMatchup.away.totalPoints) {
                     setNewWins((previousWins) => previousWins + 1);
                 } else {

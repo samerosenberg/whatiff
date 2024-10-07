@@ -17,7 +17,6 @@ export default function MaxBoxScoreTable(tableProps: IBoxScoreTableProps) {
         }
     }
 
-    //TODO add scoring totals row
     return (
         <div className="overflow-x-auto">
             <table className="table">

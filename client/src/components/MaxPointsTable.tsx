@@ -105,17 +105,25 @@ export default function MaxPointsTable(tableProps: IMaxPointsTableProps) {
                                     {matchup.home.teamId === tableProps.activeTeam?.id ? (
                                         <p>
                                             {" "}
-                                            {Object.values(matchup.home.pointsByScoringPeriod)
-                                                .reduce((partialSum, score) => partialSum + score)
-                                                .toFixed(2)}{" "}
+                                            {matchup.home.pointsByScoringPeriod
+                                                ? Object.values(matchup.home.pointsByScoringPeriod)
+                                                      .reduce(
+                                                          (partialSum, score) => partialSum + score
+                                                      )
+                                                      .toFixed(2)
+                                                : 0}{" "}
                                             -{">"} {matchup.home.totalPoints.toFixed(2)}{" "}
                                         </p>
                                     ) : (
                                         <p>
                                             {" "}
-                                            {Object.values(matchup.away.pointsByScoringPeriod)
-                                                .reduce((partialSum, score) => partialSum + score)
-                                                .toFixed(2)}{" "}
+                                            {matchup.away.pointsByScoringPeriod
+                                                ? Object.values(matchup.away.pointsByScoringPeriod)
+                                                      .reduce(
+                                                          (partialSum, score) => partialSum + score
+                                                      )
+                                                      .toFixed(2)
+                                                : 0}{" "}
                                             -{">"} {matchup.away.totalPoints.toFixed(2)}{" "}
                                         </p>
                                     )}

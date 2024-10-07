@@ -17,7 +17,6 @@ export default function BoxScoreTable(tableProps: IBoxScoreTableProps) {
         }
     }
 
-    //TODO add scoring totals row
     return (
         <div className="overflow-x-auto">
             <table className="table">
@@ -38,12 +37,17 @@ export default function BoxScoreTable(tableProps: IBoxScoreTableProps) {
                                     <div className="flex items-center space-x-3">
                                         <div className="avatar">
                                             <div className="mask mask-squircle w-12 h-12">
-                                                <img src={player.getHeadshot()} alt="Avatar Tailwind CSS Component" />
+                                                <img
+                                                    src={player.getHeadshot()}
+                                                    alt="Avatar Tailwind CSS Component"
+                                                />
                                             </div>
                                         </div>
                                         <div>
                                             <div className="font-bold">{player.fullName}</div>
-                                            <div className="text-sm opacity-50">{proTeamId[player.proTeamId]}</div>
+                                            <div className="text-sm opacity-50">
+                                                {proTeamId[player.proTeamId]}
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
@@ -65,12 +69,17 @@ export default function BoxScoreTable(tableProps: IBoxScoreTableProps) {
                                     <div className="flex items-center space-x-3">
                                         <div className="avatar">
                                             <div className="mask mask-squircle w-12 h-12">
-                                                <img src={player.getHeadshot()} alt="Avatar Tailwind CSS Component" />
+                                                <img
+                                                    src={player.getHeadshot()}
+                                                    alt="Avatar Tailwind CSS Component"
+                                                />
                                             </div>
                                         </div>
                                         <div>
                                             <div className="font-bold">{player.fullName}</div>
-                                            <div className="text-sm opacity-50">{proTeamId[player.proTeamId]}</div>
+                                            <div className="text-sm opacity-50">
+                                                {proTeamId[player.proTeamId]}
+                                            </div>
                                         </div>
                                     </div>
                                 </td>

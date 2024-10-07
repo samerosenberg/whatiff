@@ -149,7 +149,7 @@ function App() {
                 />
                 <Route path="schedule" element={<SchedulePage />} />
                 <Route path="matchups" element={<MatchupsPage />} />
-                <Route path="boxscore/:week/:matchupId/:m" element={<BoxScorePage />} />
+                <Route path="boxscore/:week/:matchupId/" element={<BoxScorePage />} />
                 <Route path="maxpoints" element={<MaxPointsPage />} />
                 <Route path="schedulechange" element={<ScheduleChangePage />} />
             </Routes>
