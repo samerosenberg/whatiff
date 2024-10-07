@@ -2,7 +2,6 @@ name: Update PR Template with JIRA Link
 
 on:
     pull_request:
-        types: [opened, reopened]
 
 jobs:
     update-pr:
