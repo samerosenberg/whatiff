@@ -17,12 +17,15 @@ jobs:
 
             - name: Get branch name and extract JIRA ID
               id: jira_id
+              env:
+                  BRANCH_NAME: ${{github.head_ref}}
               run: |
                   # Get the branch name from the environment
-                  BRANCH_NAME=$(echo "${{ github.head_ref }}")
+                  echo "$BRANCH_NAME"
 
                   # Extract JIRA ID in the form DEV-XXXXX
-                  JIRA_ID=$(echo "$BRANCH_NAME" | grep -oP 'DEV-\d+')
+                  if[[ $BRANCH_NAME =~ [Dd[Ee][Vv]-[0-9]+ || $BRANCH_NAME =~ [Pp][Oo][Dd][Aa][Ii]-[0-9]+ ]]; then
+                    JIRA_ID=${BASH_REMATCH[0]}
 
                   # Fail if no JIRA ID found
                   if [ -z "$JIRA_ID" ]; then
